@@ -2,23 +2,27 @@
 
 DEBS=()
 # Basic development environment
-DEBS=(${DEBS[@]} vim git subversion gnupg flex bison gperf build-essential zip rar unrar curl)
-DEBS=(${DEBS[@]} autoconf automake cmake gawk gperf lzma m4 rpm texinfo xmlto expect libtool)
-DEBS=(${DEBS[@]} intltool libbz2-dev libcap-dev libglib2.0-dev libxml-simple-perl libxml2-dev)
+DEBS=(${DEBS[@]} git gitk subversion aptitude)
+DEBS=(${DEBS[@]} gnupg flex bison gperf build-essential zip rar unrar curl)
+DEBS=(${DEBS[@]} autoconf automake cmake gawk lzma m4 rpm texinfo xmlto expect intltool)
+DEBS=(${DEBS[@]} libtool libbz2-dev libcap-dev libglib2.0-dev libxml-simple-perl libxml2-dev)
 DEBS=(${DEBS[@]} x11-xkb-utils zlib1g-dev expect libmpfr-dev libgmp3-dev libgphoto2-2-dev)
 # Android development related
 DEBS=(${DEBS[@]} libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386)
 DEBS=(${DEBS[@]} libgl1-mesa-glx:i386 libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown)
 DEBS=(${DEBS[@]} libxml2-utils xsltproc zlib1g-dev:i386)
 # Kernel development related
-DEBS=(${DEBS[@]} uboot-mkimage)
+DEBS=(${DEBS[@]} uboot-mkimage lzop openocd vim exuberant-ctags cscope fakeroot gcc-arm-linux-gnueabi)
+# IDE related
+DEBS=(${DEBS[@]} vim exuberant-ctags cscope eclipse meld)
 # Other
-DEBS=(${DEBS[@]} aptitude nautilus-open-terminal bash-completion libfreetype6:i386 libglu1-mesa:i386 libcups2:i386)
+DEBS=(${DEBS[@]} nautilus-open-terminal bash-completion)
+# x86 libs
 DEBS=(${DEBS[@]} ia32-libs)
 # Software
-DEBS=(${DEBS[@]} gimp wireshark meld gitk openocd virtualbox eclipse)
+DEBS=(${DEBS[@]} gimp wireshark virtualbox)
 # Python
-DEBS=(${DEBS[@]} python-gpgme)
+DEBS=(${DEBS[@]} python-gpgme python-markdown)
 #
 DEBS=(`echo ${DEBS[@]} | sed 's/ /\n/g' | sort | uniq`)
 
@@ -53,15 +57,43 @@ if [ ${#DEBS_U[@]} -gt 0 ]; then
   sudo apt-get install ${DEBS_U[@]}
 fi
 
-if which java 1>/dev/null 2>&1; then
+JDK1=`which java 1>/dev/null 2>&1; echo $?`
+JDK2=`java -version 2>&1 | grep -i openjdk`
+JDK2=`test -z "$JDK2"; echo $?`
+
+echo JDK1=$JDK1
+echo JDK2=$JDK2
+if [ ! $JDK2 -a $JDK1 ]; then
   echo > /dev/null
 else
   echo
   echo "Install Java environment..."
-  sudo add-apt-repository "deb http://mirrors.163.com/ubuntu/ hardy multiverse"
-  sudo apt-get update
-  sudo apt-get install sun-java6-jdk
-  sudo add-apt-repository -r "deb http://mirrors.163.com/ubuntu/ hardy multiverse"
+  #sudo add-apt-repository "deb http://mirrors.163.com/ubuntu/ hardy multiverse"
+  #sudo apt-get update
+  #sudo apt-get install sun-java6-jdk
+  #sudo add-apt-repository -r "deb http://mirrors.163.com/ubuntu/ hardy multiverse"
+  curl http://uni-smr.ac.ru/archive/dev/java/SDKs/sun/j2se/6/jdk-6u45-linux-x64.bin > /tmp/jdk-6u45-linux-x64.bin
+  curl http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/6/jre-6u45-linux-x64.bin    > /tmp/jre-6u45-linux-x64.bin
+  #curl http://download.oracle.com/otn/java/jdk/6u45-b06/jre-6u45-linux-x64.bin > /tmp/jre-6u45-linux-x64.bin
+  #curl http://download.oracle.com/otn/java/jdk/6u45-b06/jre-6u45-linux-x64.bin > /tmp/jre-6u45-linux-x64.bin
+  sudo mkdir -p /usr/lib/jvm
+  sudo mv /tmp/jdk-6u45-linux-x64.bin /usr/lib/jvm
+  sudo mv /tmp/jre-6u45-linux-x64.bin /usr/lib/jvm
+  sudo chmod a+x /usr/lib/jvm/jdk-6u45-linux-x64.bin
+  sudo chmod a+x /usr/lib/jvm/jre-6u45-linux-x64.bin
+  cd /usr/lib/jvm/
+  sudo ./jdk-6u45-linux-x64.bin
+  sudo ./jre-6u45-linux-x64.bin
+  sudo update-alternatives --install "/usr/bin/java"  "java"  "/usr/lib/jvm/jre1.6.0_45/bin/java"  1
+  sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.6.0_45/bin/javac" 1
+  sudo update-alternatives --set java  /usr/lib/jvm/jre1.6.0_45/bin/java
+  sudo update-alternatives --set javac /usr/lib/jvm/jdk1.6.0_45/bin/javac
+  echo "JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45" >  /tmp/java.sh
+  echo "export JAVA_HOME"                   >> /tmp/java.sh
+  sudo mv /tmp/java.sh /etc/profile.d/java.sh
+  . /etc/profile
+  java -version
+  #Workaround: http://hendrelouw73.wordpress.com/2013/05/07/how-to-install-oracle-java-6-update-45-on-ubuntu-12-10-linux/
 fi
 
 for d in ${PKGS[@]};
