@@ -88,10 +88,12 @@ else
   sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.6.0_45/bin/javac" 1
   sudo update-alternatives --set java  /usr/lib/jvm/jre1.6.0_45/bin/java
   sudo update-alternatives --set javac /usr/lib/jvm/jdk1.6.0_45/bin/javac
-  echo "JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45" >  /tmp/java.sh
-  echo "export JAVA_HOME"                   >> /tmp/java.sh
+  echo 'JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45' >  /tmp/java.sh
+  echo 'PATH=$PATH:$JAVA_HOME/bin'          >> /tmp/java.sh
+  echo 'export JAVA_HOME'                   >> /tmp/java.sh
+  echo 'export PATH'                        >> /tmp/java.sh
   sudo mv /tmp/java.sh /etc/profile.d/java.sh
-  . /etc/profile
+  source /etc/profile
   java -version
   #Workaround: http://hendrelouw73.wordpress.com/2013/05/07/how-to-install-oracle-java-6-update-45-on-ubuntu-12-10-linux/
 fi
