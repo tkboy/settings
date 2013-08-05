@@ -3,7 +3,7 @@
 DEBS=()
 # Basic development environment
 DEBS=(${DEBS[@]} git gitk subversion aptitude)
-DEBS=(${DEBS[@]} gnupg flex bison gperf build-essential zip rar unrar curl)
+DEBS=(${DEBS[@]} gnupg flex bison gperf build-essential zip rar unrar p7zip curl)
 DEBS=(${DEBS[@]} autoconf automake cmake gawk lzma m4 rpm texinfo xmlto expect intltool)
 DEBS=(${DEBS[@]} libtool libbz2-dev libcap-dev libglib2.0-dev libxml-simple-perl libxml2-dev)
 DEBS=(${DEBS[@]} x11-xkb-utils zlib1g-dev expect libmpfr-dev libgmp3-dev libgphoto2-2-dev)
@@ -26,6 +26,7 @@ DEBS=(${DEBS[@]} python-gpgme python-markdown)
 #
 DEBS=(`echo ${DEBS[@]} | sed 's/ /\n/g' | sort | uniq`)
 
+#TODO add vmplayer dupeGuru bcompare
 PKGS=(${PKGS[@]} dropbox@https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_1.6.0_amd64.deb)
 PKGS=(${PKGS[@]} google-chrome@https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
 PKGS=(${PKGS[@]} wps@http://wdl.cache.ijinshan.com/wps/download/Linux/unstable/kingsoft-office_9.1.0.4111~a11p2_i386.deb)
@@ -61,9 +62,9 @@ JDK1=`which java 1>/dev/null 2>&1; echo $?`
 JDK2=`java -version 2>&1 | grep -i openjdk`
 JDK2=`test -z "$JDK2"; echo $?`
 
-echo JDK1=$JDK1
-echo JDK2=$JDK2
-if [ ! $JDK2 -a $JDK1 ]; then
+#echo JDK1=$JDK1
+#echo JDK2=$JDK2
+if [ $JDK2 -a $JDK1 ]; then
   echo > /dev/null
 else
   echo
@@ -147,7 +148,7 @@ else
   /tmp/yEd-3.11_64-bit_setup.sh
 fi
 
-if which repo 1>/dev/null 2>&1; then
+if [ -f ~/bin/repo ]; then
   echo "Android repo exists!" > /dev/null
 else
   echo
@@ -159,3 +160,6 @@ else
   curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ~/bin/repo
   chmod a+x ~/bin/repo
 fi
+
+echo
+echo "All setup finished!"
