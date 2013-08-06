@@ -12,7 +12,7 @@ DEBS=(${DEBS[@]} libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadl
 DEBS=(${DEBS[@]} libgl1-mesa-glx:i386 libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown)
 DEBS=(${DEBS[@]} libxml2-utils xsltproc zlib1g-dev:i386)
 # Kernel development related
-DEBS=(${DEBS[@]} uboot-mkimage lzop openocd vim exuberant-ctags cscope fakeroot gcc-arm-linux-gnueabi)
+DEBS=(${DEBS[@]} uboot-mkimage lzop openocd fakeroot gcc-arm-linux-gnueabi)
 # IDE related
 DEBS=(${DEBS[@]} vim exuberant-ctags cscope eclipse meld)
 # Other
