@@ -161,5 +161,16 @@ else
   chmod a+x ~/bin/repo
 fi
 
+#Authorized to access the phones over USB
+if [ -f /etc/udev/rules.d/51-android.rules ]; then
+  echo "Already Authorized to access the phones over USB!"  > /dev/null
+else
+  echo
+  UNAME=`whoami`
+  echo "Authorized \"$UNAME\" to access the phones over USB..."
+  sed "s/tkboy/$UNAME/g" .etc/51-android.rules > /tmp/51-android.rules
+  sudo cp /tmp/51-android.rules /etc/udev/rules.d/51-android.rules
+fi
+
 echo
 echo "All setup finished!"
