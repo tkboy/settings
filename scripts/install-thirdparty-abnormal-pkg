@@ -2,7 +2,7 @@
 
 function install_yed() {
   if ls ~/.local/share/applications/yEd* 1>/dev/null 2>&1; then
-    echo "yEd exists!" > /dev/null
+    check_log -i "yEd http://www.yworks.com/products/yed/demo/yEd-3.11_64-bit_setup.sh"
   else
     echo
     echo "Installing yEd..."

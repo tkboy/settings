@@ -14,6 +14,8 @@ function setup_android_device_udev() {
 function check_config_android_device_udev() {
   if [ ! -f /etc/udev/rules.d/51-android.rules ]; then
     check_config UDEV_ANDROID "Authorized \"$UNAME\" to access the Android phones over USB"
+  else
+    check_log -s "/etc/udev/rules.d/51-android.rules"
   fi
 }
 

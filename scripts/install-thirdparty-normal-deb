@@ -16,6 +16,7 @@ function installing_thirdparty_normal_debs() {
     #echo $PN"="$PS
     if which $PN 1>/dev/null 2>&1; then
       echo "$PN exists!" > /dev/null
+      check_log -i "$PN $PS"
     else
       echo
       echo "Installing $PN, Downloading $PS..."

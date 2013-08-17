@@ -1,24 +1,30 @@
 #!/bin/bash
 
 ANDROID_DEBS=()
+ANDROID_DEBS=(${ANDROID_DEBS[@]} git gnupg flex bison gperf build-essential zip curl libc6-dev)
+ANDROID_DEBS=(${ANDROID_DEBS[@]} libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386)
+ANDROID_DEBS=(${ANDROID_DEBS[@]} libgl1-mesa-glx:i386 libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown)
+ANDROID_DEBS=(${ANDROID_DEBS[@]} libxml2-utils xsltproc zlib1g-dev:i386)
+
 function load_apt_install_android_debs() {
   if [ $CONFIG_ANDROID = true ]; then
-    ANDROID_DEBS=(${DEBS[@]} git gnupg flex bison gperf build-essential zip curl libc6-dev)
-    ANDROID_DEBS=(${DEBS[@]} libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386)
-    ANDROID_DEBS=(${DEBS[@]} libgl1-mesa-glx:i386 libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown)
-    ANDROID_DEBS=(${DEBS[@]} libxml2-utils xsltproc zlib1g-dev:i386)
     DEBS=(${DEBS[@]} ${ANDROID_DEBS[@]})
   fi
 }
 
 function check_config_android() {
+  local need_check=false
   for d in ${ANDROID_DEBS[@]};
   do
     if ! dpkg-query -s $d 1>/dev/null 2>&1; then
-      check_config ANDROID "Install Android deveopment env"
-      return
+      need_check=true
+    else
+      check_log -i $d
     fi
   done
+  if [ $need_check = true ]; then
+    check_config ANDROID "Install Android deveopment env"
+  fi
 }
 
 function setup_android_repo() {
@@ -37,6 +43,8 @@ function setup_android_repo() {
 function check_config_android_repo() {
   if [ ! -f ~/bin/repo ]; then
     check_config ANDROID_REPO "Setup Android repo tool"
+  else
+    check_log -i "repo tool"
   fi
 }
 

@@ -11,6 +11,8 @@ function setup_ssh() {
 function check_config_ssh() {
   if [ ! -d ~/.ssh ]; then
     check_config SSH "Setup ssh rsa key"
+  else
+    check_log -s "ssh rsa key"
   fi
 }
 

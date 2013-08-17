@@ -11,6 +11,8 @@ function installing_fonts_for_wps() {
     curl https://raw.github.com/tkboy/settings/master/.fonts/wingding.ttf > ~/.fonts/wingding.ttf
     curl https://raw.github.com/tkboy/settings/master/.fonts/WINGDNG2.ttf > ~/.fonts/WINGDNG2.ttf
     curl https://raw.github.com/tkboy/settings/master/.fonts/WINGDNG3.ttf > ~/.fonts/WINGDNG3.ttf
+  else
+    check_log -s "wps fonts"
   fi
 }
 

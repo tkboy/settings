@@ -38,8 +38,12 @@ function check_config_java() {
   JDK1=`which java 1>/dev/null 2>&1; echo $?`
   JDK2=`java -version 2>&1 | grep -i openjdk`
   JDK2=`test -z "$JDK2"; echo $?`
-  [ $JDK2 -a $JDK1 ]      || check_config JAVA     "Install Java"
-  [ $CONFIG_JAVA = false ] || check_config JAVA_BIN "Install latest Java from sun bin files"
+  if [ $JDK2 -a $JDK1 ]; then
+    check_log -i java
+  else
+    check_config JAVA     "Install Java"
+    [ $CONFIG_JAVA = false ] || check_config JAVA_BIN "Install latest Java from sun bin files"
+  fi
 }
 
 function installing_java() {

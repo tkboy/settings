@@ -42,6 +42,8 @@ function apt_add_repo() {
 function check_config_wine() {
   if ! which wine 1>/dev/null 2>&1; then
     check_config WINE "Install Wine 1.5"
+  else
+    check_log -i wine
   fi
 }
 
@@ -58,17 +60,17 @@ function analysis_ubuntu_apt_debs() {
   do
     if dpkg-query -s $d 1>/dev/null 2>&1; then
       DEBS_I=(${DEBS_I[@]} $d)
+      check_log -i $d
     else
       DEBS_U=(${DEBS_U[@]} $d)
     fi
   done
 
-if [ ${#DEBS_I[@]} -gt 0 ]; then
-  echo
-  echo "Already installed Package:"
-  echo "  "${DEBS_I[@]}
-fi
-
+  #if [ ${#DEBS_I[@]} -gt 0 ]; then
+  #  echo
+  #  echo "Already installed Package:"
+  #  echo "  "${DEBS_I[@]}
+  #fi
 }
 
 function installing_ubuntu_apt_debs() {
