@@ -1,0 +1,53 @@
+#!/bin/bash
+
+function java_installing_from_bins() {
+  echo
+  echo "Install Java environment..."
+  curl http://uni-smr.ac.ru/archive/dev/java/SDKs/sun/j2se/6/jdk-6u45-linux-x64.bin > /tmp/jdk-6u45-linux-x64.bin
+  curl http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/6/jre-6u45-linux-x64.bin    > /tmp/jre-6u45-linux-x64.bin
+  sudo mkdir -p /usr/lib/jvm
+  sudo mv /tmp/jdk-6u45-linux-x64.bin /usr/lib/jvm
+  sudo mv /tmp/jre-6u45-linux-x64.bin /usr/lib/jvm
+  sudo chmod a+x /usr/lib/jvm/jdk-6u45-linux-x64.bin
+  sudo chmod a+x /usr/lib/jvm/jre-6u45-linux-x64.bin
+  cd /usr/lib/jvm/
+  sudo ./jdk-6u45-linux-x64.bin
+  sudo ./jre-6u45-linux-x64.bin
+  sudo update-alternatives --install "/usr/bin/java"  "java"  "/usr/lib/jvm/jre1.6.0_45/bin/java"  1
+  sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.6.0_45/bin/javac" 1
+  sudo update-alternatives --set java  /usr/lib/jvm/jre1.6.0_45/bin/java
+  sudo update-alternatives --set javac /usr/lib/jvm/jdk1.6.0_45/bin/javac
+  echo 'JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45' >  /tmp/java.sh
+  echo 'PATH=$PATH:$JAVA_HOME/bin'          >> /tmp/java.sh
+  echo 'export JAVA_HOME'                   >> /tmp/java.sh
+  echo 'export PATH'                        >> /tmp/java.sh
+  sudo mv /tmp/java.sh /etc/profile.d/java.sh
+  source /etc/profile
+  java -version
+  #Workaround: http://hendrelouw73.wordpress.com/2013/05/07/how-to-install-oracle-java-6-update-45-on-ubuntu-12-10-linux/
+}
+
+function java_installing_from_apt() {
+  sudo add-apt-repository "deb http://mirrors.163.com/ubuntu/ hardy multiverse"
+  sudo apt-get update
+  sudo apt-get install sun-java6-jdk
+  sudo add-apt-repository -r "deb http://mirrors.163.com/ubuntu/ hardy multiverse"
+}
+
+function check_config_java() {
+  JDK1=`which java 1>/dev/null 2>&1; echo $?`
+  JDK2=`java -version 2>&1 | grep -i openjdk`
+  JDK2=`test -z "$JDK2"; echo $?`
+  [ $JDK2 -a $JDK1 ]      || check_config JAVA     "Install Java"
+  [ $CONFIG_JAVA = false ] || check_config JAVA_BIN "Install latest Java from sun bin files"
+}
+
+function installing_java() {
+  if [ $CONFIG_JAVA_BIN = true ]; then
+    java_installing_from_bins
+  elif [ $CONFIG_JAVA = true ]; then
+    java_installing_from_apt
+  fi
+}
+
+

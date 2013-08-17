@@ -1,0 +1,17 @@
+#!/bin/bash
+
+function install_yed() {
+  if ls ~/.local/share/applications/yEd* 1>/dev/null 2>&1; then
+    echo "yEd exists!" > /dev/null
+  else
+    echo
+    echo "Installing yEd..."
+    wget -o /tmp/yEd-3.11_64-bit_setup.sh http://www.yworks.com/products/yed/demo/yEd-3.11_64-bit_setup.sh
+    chmod a+x /tmp/yEd-3.11_64-bit_setup.sh
+    /tmp/yEd-3.11_64-bit_setup.sh
+  fi
+}
+
+function installing_thirdparty_abnormal_packages() {
+  install_yed
+}

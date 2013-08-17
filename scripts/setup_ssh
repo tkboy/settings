@@ -1,0 +1,17 @@
+#!/bin/bash
+
+function setup_ssh() {
+  if [ $CONFIG_SSH = true ]; then
+    echo
+    echo "Setup ssh rsa key..."
+    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+  fi
+}
+
+function check_config_ssh() {
+  if [ ! -d ~/.ssh ]; then
+    check_config SSH "Setup ssh rsa key"
+  fi
+}
+
+

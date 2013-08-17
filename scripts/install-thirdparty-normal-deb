@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function load_thirdparty_normal_debs() {
+  #TODO add vmplayer dupeGuru bcompare
+  PKGS=(${PKGS[@]} dropbox@https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_1.6.0_amd64.deb)
+  PKGS=(${PKGS[@]} google-chrome@https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
+  PKGS=(${PKGS[@]} wps@http://wdl.cache.ijinshan.com/wps/download/Linux/unstable/kingsoft-office_9.1.0.4111~a11p2_i386.deb)
+  PKGS=(${PKGS[@]} bcompare@http://www.scootersoftware.com/bcompare-3.3.8.16340_i386.deb)
+}
+
+function installing_thirdparty_normal_debs() {
+  for d in ${PKGS[@]};
+  do
+    PN=`echo $d | cut -d "@" -f1`
+    PS=`echo $d | cut -d "@" -f2`
+    #echo $PN"="$PS
+    if which $PN 1>/dev/null 2>&1; then
+      echo "$PN exists!" > /dev/null
+    else
+      echo
+      echo "Installing $PN, Downloading $PS..."
+      curl $PS > /tmp/$PN.deb
+      sudo dpkg -i /tmp/$PN.deb
+    fi
+  done
+}

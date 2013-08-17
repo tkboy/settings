@@ -1,0 +1,8 @@
+#!/bin/bash
+
+function load_thirdparty_green_packages() {
+  #don't need installing program
+  PROG=(${PROG[@]} ~/prog/ndk@https://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64.tar.bz2)
+  PROG=(${PROG[@]} ~/prog/adt@https://dl.google.com/android/adt/adt-bundle-linux-x86_64-20130729.zip)
+}
+

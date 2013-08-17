@@ -1,0 +1,52 @@
+#!/bin/bash
+
+ANDROID_DEBS=()
+function load_apt_install_android_debs() {
+  if [ $CONFIG_ANDROID = true ]; then
+    ANDROID_DEBS=(${DEBS[@]} git gnupg flex bison gperf build-essential zip curl libc6-dev)
+    ANDROID_DEBS=(${DEBS[@]} libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386)
+    ANDROID_DEBS=(${DEBS[@]} libgl1-mesa-glx:i386 libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown)
+    ANDROID_DEBS=(${DEBS[@]} libxml2-utils xsltproc zlib1g-dev:i386)
+    DEBS=(${DEBS[@]} ${ANDROID_DEBS[@]})
+  fi
+}
+
+function check_config_android() {
+  for d in ${ANDROID_DEBS[@]};
+  do
+    if ! dpkg-query -s $d 1>/dev/null 2>&1; then
+      check_config ANDROID "Install Android deveopment env"
+      return
+    fi
+  done
+}
+
+function setup_android_repo() {
+  if [ $CONFIG_ANDROID_REPO = true ]; then
+    echo
+    echo "Installing Android repo..."
+    if [ ! -d ~/bin ]; then
+      mkdir ~/bin
+      PATH=~/bin:$PATH
+    fi
+    curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ~/bin/repo
+    chmod a+x ~/bin/repo
+  fi
+}
+
+function check_config_android_repo() {
+  if [ ! -f ~/bin/repo ]; then
+    check_config ANDROID_REPO "Setup Android repo tool"
+  fi
+}
+
+function setup_android_env_post() {
+  if [ $CONFIG_ANDROID = true ]; then
+    if [ ! -f /usr/lib/i386-linux-gnu/libGL.so ]; then
+      echo
+      echo "Setup Android building environment..."
+      ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so
+    fi
+  fi
+}
+

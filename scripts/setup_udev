@@ -1,0 +1,28 @@
+#!/bin/bash
+
+UNAME=`whoami`
+
+function setup_android_device_udev() {
+  if [ $CONFIG_UDEV_ANDROID = true ]; then
+    echo
+    echo "Authorized \"$UNAME\" to access the phones over USB..."
+    sed "s/tkboy/$UNAME/g" .etc/51-android.rules > /tmp/51-android.rules
+    sudo cp /tmp/51-android.rules /etc/udev/rules.d/51-android.rules
+  fi
+}
+
+function check_config_android_device_udev() {
+  if [ ! -f /etc/udev/rules.d/51-android.rules ]; then
+    check_config UDEV_ANDROID "Authorized \"$UNAME\" to access the Android phones over USB"
+  fi
+}
+
+#All configs in one
+
+function setup_udev() {
+  setup_android_device_udev
+}
+
+function check_config_udev() {
+  check_config_android_device_udev
+}

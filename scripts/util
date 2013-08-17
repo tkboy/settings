@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function log() {
+  echo $1
+}
+
+function check_config() {
+  local ANSWER
+  read -n1 -p "$2 [y/N]? " ANSWER
+  echo
+  if [ "$ANSWER" = "Y" -o "$ANSWER" = "y" ]; then
+    eval CONFIG_$1=true
+  else
+    eval CONFIG_$1=false
+  fi
+}
+
+

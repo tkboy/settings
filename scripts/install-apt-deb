@@ -1,0 +1,85 @@
+#!/bin/bash
+
+APT_UPDATE_NEED=false
+DEBS_I=()
+DEBS_U=()
+
+function load_apt_install_debs() {
+  # Basic development environment
+  DEBS=(${DEBS[@]} git gitk subversion aptitude)
+  DEBS=(${DEBS[@]} gnupg flex bison gperf build-essential zip rar unrar p7zip curl)
+  DEBS=(${DEBS[@]} autoconf automake cmake gawk lzma m4 rpm texinfo xmlto expect intltool)
+  DEBS=(${DEBS[@]} libtool libbz2-dev libcap-dev libglib2.0-dev libxml-simple-perl libxml2-dev)
+  DEBS=(${DEBS[@]} x11-xkb-utils zlib1g-dev expect libmpfr-dev libgmp3-dev libgphoto2-2-dev)
+  # Kernel development related
+  DEBS=(${DEBS[@]} uboot-mkimage lzop openocd fakeroot gcc-arm-linux-gnueabi)
+  # IDE related
+  DEBS=(${DEBS[@]} vim exuberant-ctags cscope eclipse eclipse-cdt meld ghex)
+  # Other
+  DEBS=(${DEBS[@]} nautilus-open-terminal bash-completion expect ia32-libs)
+  # x86 libs
+  if [ $CONFIG_WINE = true ]; then
+    DEBS=(${DEBS[@]} wine1.5)
+  fi
+  # Software
+  DEBS=(${DEBS[@]} gimp wireshark virtualbox)
+  # Python
+  DEBS=(${DEBS[@]} python-gpgme python-markdown)
+  #
+  DEBS=(`echo ${DEBS[@]} | sed 's/ /\n/g' | sort | uniq`)
+}
+
+
+function apt_add_repo() {
+  if [ $CONFIG_WINE = true ]; then
+    echo
+    echo "Add repository: ppa:ubuntu-wine/ppa"
+    sudo apt-add-repository ppa:ubuntu-wine/ppa
+    CONFIG_APT_UPDATE=true
+  fi
+}
+
+function check_config_wine() {
+  if ! which wine 1>/dev/null 2>&1; then
+    check_config WINE "Install Wine 1.5"
+  fi
+}
+
+function apt_add_update() {
+  if [ $CONFIG_APT_UPDATE = true ]; then
+    echo
+    echo "Update new added repository..."
+    sudo apt-get update
+  fi
+}
+
+function analysis_ubuntu_apt_debs() {
+  for d in ${DEBS[@]};
+  do
+    if dpkg-query -s $d 1>/dev/null 2>&1; then
+      DEBS_I=(${DEBS_I[@]} $d)
+    else
+      DEBS_U=(${DEBS_U[@]} $d)
+    fi
+  done
+
+if [ ${#DEBS_I[@]} -gt 0 ]; then
+  echo
+  echo "Already installed Package:"
+  echo "  "${DEBS_I[@]}
+fi
+
+}
+
+function installing_ubuntu_apt_debs() {
+  analysis_ubuntu_apt_debs
+  if [ ${#DEBS_U[@]} -gt 0 ]; then
+    echo
+    echo "Installing:"
+    echo "  "${DEBS_U[@]}
+    echo
+    sudo apt-get install ${DEBS_U[@]}
+  fi
+}
+
+
