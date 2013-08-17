@@ -14,13 +14,13 @@ DEBS=(${DEBS[@]} libxml2-utils xsltproc zlib1g-dev:i386)
 # Kernel development related
 DEBS=(${DEBS[@]} uboot-mkimage lzop openocd fakeroot gcc-arm-linux-gnueabi)
 # IDE related
-DEBS=(${DEBS[@]} vim exuberant-ctags cscope eclipse meld)
+DEBS=(${DEBS[@]} vim exuberant-ctags cscope eclipse eclipse-cdt meld ghex)
 # Other
-DEBS=(${DEBS[@]} nautilus-open-terminal bash-completion)
+DEBS=(${DEBS[@]} nautilus-open-terminal bash-completion expect)
 # x86 libs
-DEBS=(${DEBS[@]} ia32-libs)
+DEBS=(${DEBS[@]} ia32-libs wine1.5)
 # Software
-DEBS=(${DEBS[@]} gimp wireshark virtualbox)
+DEBS=(${DEBS[@]} gimp wireshark virtualbox dia)
 # Python
 DEBS=(${DEBS[@]} python-gpgme python-markdown)
 #
@@ -30,8 +30,21 @@ DEBS=(`echo ${DEBS[@]} | sed 's/ /\n/g' | sort | uniq`)
 PKGS=(${PKGS[@]} dropbox@https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_1.6.0_amd64.deb)
 PKGS=(${PKGS[@]} google-chrome@https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
 PKGS=(${PKGS[@]} wps@http://wdl.cache.ijinshan.com/wps/download/Linux/unstable/kingsoft-office_9.1.0.4111~a11p2_i386.deb)
+PKGS=(${PKGS[@]} bcompare@http://www.scootersoftware.com/bcompare-3.3.8.16340_i386.deb)
+
+#don't need installing program
+PROG=(${PROG[@]} ~/prog/ndk@https://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64.tar.bz2)
+PROG=(${PROG[@]} ~/prog/adt@https://dl.google.com/android/adt/adt-bundle-linux-x86_64-20130729.zip)
+
 
 echo "Anlysising..."
+
+if ! which wine 1>/dev/null 2>&1; then
+  echo
+  echo "Add repository: ppa:ubuntu-wine/ppa"
+  sudo apt-add-repository ppa:ubuntu-wine/ppa
+  sudo apt-get update
+fi
 
 DEBS_I=()
 DEBS_U=()
