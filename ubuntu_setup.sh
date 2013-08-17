@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Preparing..."
+echo "Preparing, checking..."
 
 DEBS=()
 

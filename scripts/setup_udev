@@ -15,7 +15,12 @@ function check_config_android_device_udev() {
   if [ ! -f /etc/udev/rules.d/51-android.rules ]; then
     check_config UDEV_ANDROID "Authorized \"$UNAME\" to access the Android phones over USB"
   else
-    check_log -s "/etc/udev/rules.d/51-android.rules"
+    local DIFF=`diff .etc/51-android.rules /etc/udev/rules.d/51-android.rules`
+    if [ ! -z "$DIFF" ]; then
+      check_config UDEV_ANDROID "/etc/udev/rules.d/51-android.rules is out of date, update it"
+    else
+      check_log -s "/etc/udev/rules.d/51-android.rules"
+    fi
   fi
 }
 
