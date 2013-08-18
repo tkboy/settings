@@ -16,9 +16,19 @@ function check_config() {
 }
 
 function check_log() {
+  local d
+  for d in ${TMPS[@]};
+  do
+    if [ "$d" = "$2" ]; then
+      return
+    fi
+  done
+
   if [ "$1" = "-i" ]; then
+    TMPS=(${TMPS[@]} $2)
     echo "checked $2 installed!"
   elif [ "$1" = "-s" ]; then
     echo "checked $2 has setup!"
   fi
 }
+

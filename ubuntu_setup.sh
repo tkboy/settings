@@ -1,8 +1,14 @@
 #!/bin/bash
 
+sudo echo "Check sudo password" > /dev/null
+echo
 echo "Preparing, checking..."
+echo
 
+TMPS=()
 DEBS=()
+PKGS=()
+PROG=()
 
 source "scripts/config"
 source "scripts/util"
