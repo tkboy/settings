@@ -21,6 +21,7 @@ source "scripts/install-thirdparty-green-deb"
 source "scripts/setup_android_env"
 source "scripts/setup_ssh"
 source "scripts/setup_udev"
+source "scripts/setup_eclipse"
 
 #check configs
 check_config_wine
@@ -53,6 +54,7 @@ setup_android_repo
 setup_android_env_post
 setup_ssh
 setup_udev
+setup_eclipse
 
 echo
 echo "All setup finished!"
