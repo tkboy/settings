@@ -6,11 +6,19 @@ function handle_error_cannot_start_at_ubuntu1204() {
   fi
 }
 
-function setup_eclipse_coffee_byte_plugin() {
+function setup_eclipse_coffee_byte_plugin1() {
   if [ ! -d /usr/lib/eclipse/plugins/com.cb.eclipse.folding_1.0.5.a ]; then
     curl http://superb-dca3.dl.sourceforge.net/project/coffeeby1/Eclipse%20Code%20Folding%20Plug-in/v%201.0.5.a/com.cb.eclipse.folding_1.0.5.a.zip > /tmp/com.cb.eclipse.folding_1.0.5.a.zip
     unzip /tmp/com.cb.eclipse.folding_1.0.5.a.zip -d /tmp/
     sudo mv /tmp/com.cb.eclipse.folding_1.0.5.a /usr/lib/eclipse/plugins/
+  fi
+}
+
+function setup_eclipse_coffee_byte_plugin() {
+  if [ ! -d /usr/lib/eclipse/features/com.cb.eclipse.folding_1.0.6 ]; then
+    unzip .eclipse/eclipse-folding-plugin.zip -d /tmp/
+    sudo mv /tmp/eclipse-folding-plugin/features/com.cb.eclipse.folding_1.0.6 /usr/lib/eclipse/features/
+    sudo mv /tmp/eclipse-folding-plugin/plugins/com.cb.eclipse.folding_1.0.6.jar /usr/lib/eclipse/plugins/
   fi
 }
 

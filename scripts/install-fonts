@@ -4,13 +4,7 @@ function installing_fonts_for_wps() {
   if [ ! -d ~/.fonts ]; then
     echo
     echo "Install Microsoft fonts for wps..."
-    mkdir ~/.fonts
-    curl https://raw.github.com/tkboy/settings/master/.fonts/WEBDINGS.TTF > ~/.fonts/WEBDINGS.TTF
-    curl https://raw.github.com/tkboy/settings/master/.fonts/mtextra.ttf  > ~/.fonts/mtextra.ttf
-    curl https://raw.github.com/tkboy/settings/master/.fonts/symbol.ttf   > ~/.fonts/symbol.ttf
-    curl https://raw.github.com/tkboy/settings/master/.fonts/wingding.ttf > ~/.fonts/wingding.ttf
-    curl https://raw.github.com/tkboy/settings/master/.fonts/WINGDNG2.ttf > ~/.fonts/WINGDNG2.ttf
-    curl https://raw.github.com/tkboy/settings/master/.fonts/WINGDNG3.ttf > ~/.fonts/WINGDNG3.ttf
+    cp -r .fonts > ~/.fonts
   else
     check_log -s "wps fonts"
   fi
